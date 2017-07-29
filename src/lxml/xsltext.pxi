@@ -222,16 +222,14 @@ cdef void _callExtensionElement(xslt.xsltTransformContext* c_ctxt,
                 e = unicode(e).encode(u"UTF-8")
             except:
                 e = repr(e).encode(u"UTF-8")
-            message = python.PyBytes_FromFormat(
+            xslt.xsltTransformError(c_ctxt, NULL, c_inst_node,
                 "Error executing extension element '%s': %s",
                 c_inst_node.name, _cstr(e))
-            xslt.xsltTransformError(c_ctxt, NULL, c_inst_node, "%s", message)
             context._exc._store_raised()
         except:
             # just in case
-            message = python.PyBytes_FromFormat(
+            xslt.xsltTransformError(c_ctxt, NULL, c_inst_node,
                 "Error executing extension element '%s'", c_inst_node.name)
-            xslt.xsltTransformError(c_ctxt, NULL, c_inst_node, "%s", message)
             context._exc._store_raised()
     except:
         # no Python functions here - everything can fail...
